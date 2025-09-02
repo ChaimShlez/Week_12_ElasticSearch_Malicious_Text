@@ -52,12 +52,21 @@ class Manager:
         return docs_to_update
 
     def delete_by_condition(self):
-        conditions = {
-            "Antisemitic": 0,
-            "weapons.keyword": "",
-            "sentiment.keyword": ["neutral", "positive"]
+        query = {
+            "query": {
+                "bool": {
+                    "must": [
+                        {"term": {"Antisemitic": 0}},
+                        {"terms": {"sentiment": ["neutral", "positive"]}}
+                    ],
+                    "must_not": [
+                        {"exists": {"field": "weapons"}}
+                    ]
+                }
+            }
         }
-        self.Query.delete_by_condition(conditions)
+
+        self.Query.delete_by_condition(query)
 
     def run(self):
         # self.Query.con_elastic.es.indices.delete(index="tweets", ignore=[400,404])
@@ -67,7 +76,7 @@ class Manager:
         # self.insert_data()
          self.get_all()
          self.set_data()
-        # self.update_mapping("sentiment")
+         self.update_mapping("sentiment")
          docs_to_update=self.insert_sentiment()
          self.update_fields(docs_to_update)
          self.get_all()
@@ -78,7 +87,7 @@ class Manager:
 
          self.delete_by_condition()
          self.finish_processing=True
-
+        #
 
 
     def get_antisemitic_with_weapons(self):
