@@ -47,7 +47,7 @@ class Analyzer:
         docs_to_update = []
         for hit in self.data['hits']['hits']:
             words = hit['_source']['text'].split()
-            detected = [w for w in weapons if w in words]
+            detected = [weapon for weapon in weapons if weapon in words]
             update_doc = {
                 "id": hit['_id'],
                 "doc": {

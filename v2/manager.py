@@ -38,8 +38,8 @@ class Manager:
         docs_to_update=self.analyzer.insert_sentiment()
         return docs_to_update
 
-    def update_mapping(self):
-        self.Query.update_mapping()
+    def update_mapping(self,name):
+        self.Query.update_mapping(name)
 
     def update_fields(self,docs_to_update):
         self.Query.bulk_update_fields(docs_to_update)
@@ -67,11 +67,12 @@ class Manager:
         # self.insert_data()
          self.get_all()
          self.set_data()
-        # self.update_mapping()
+        # self.update_mapping("sentiment")
          docs_to_update=self.insert_sentiment()
          self.update_fields(docs_to_update)
          self.get_all()
          self.read_text()
+         self.update_mapping("weapons")
          docs_to_update=self.weapons_in_text()
          self.update_fields(docs_to_update)
 

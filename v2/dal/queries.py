@@ -65,10 +65,10 @@ class Queries:
 
         return results
 
-    def update_mapping(self):
+    def update_mapping(self,name_field):
         new_mappings = {
             "properties": {
-                "sentiment": {"type": "keyword"}
+                name_field: {"type": "keyword"}
             }
         }
 
