@@ -71,25 +71,25 @@ class Manager:
     def run(self):
         # self.Query.con_elastic.es.indices.delete(index="tweets", ignore=[400,404])
 
-        # self.fetcher()
-        # self.create_index()
-        # self.insert_data()
-         self.get_all()
-         self.set_data()
-         self.update_mapping("sentiment")
-         docs_to_update=self.insert_sentiment()
-         self.update_fields(docs_to_update)
-         self.get_all()
-         self.read_text()
-         self.update_mapping("weapons")
-         docs_to_update=self.weapons_in_text()
-         self.update_fields(docs_to_update)
+        self.fetcher()
+        self.create_index()
+        self.insert_data()
+        self.get_all()
+        self.set_data()
+        # self.update_mapping("sentiment")
+        docs_to_update=self.insert_sentiment()
+        self.update_fields(docs_to_update)
+        self.get_all()
+        self.read_text()
+        # self.update_mapping("weapons")
+        docs_to_update=self.weapons_in_text()
+        self.update_fields(docs_to_update)
 
-         self.delete_by_condition()
-         self.finish_processing=True
+        self.delete_by_condition()
+        self.finish_processing=True
         #
 
-
+    # {"exists": {"field": "weapons"}}
     def get_antisemitic_with_weapons(self):
         query = {
             "query": {
@@ -97,13 +97,29 @@ class Manager:
                     "must": [
                         {"term": {"Antisemitic": 1}},
                         {"script": {
-                            "script": "doc['weapons'].size() > 0"
+                            "script": "doc['weapons.keyword'].size() > 0"
                         }}
                     ]
                 }
             }
         }
-        return self.Query.get_antisemitic_with_weapons(query)
+        return self.Query.get_data_by_query(query)
+
+
+    def get_weapons_more_two(self):
+        query = {
+            "query": {
+                "bool": {
+                    "must": [
+                        {"script": {
+                            "script": "doc['weapons.keyword'].size() > 2"
+                        }}
+                    ]
+                }
+            }
+        }
+        return self.Query.get_data_by_query(query)
+
 
 
 

@@ -101,7 +101,13 @@ class Queries:
             print(f"Failed to delete documents from index {self.name_index}: {e}")
             return 0
 
-    def get_antisemitic_with_weapons(self, query):
-        res = self.con_elastic.es.search(index=self.name_index, body=query)
-        return [hit['_source'] for hit in res['hits']['hits']]
+    def get_data_by_query(self, query):
+        try:
+            res = self.con_elastic.es.search(index=self.name_index, body=query)
+            return [hit['_source'] for hit in res['hits']['hits']]
+        except Exception as e:
+            print("Elasticsearch error:", e)
+            return {"error": str(e)}
+
+
 

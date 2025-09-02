@@ -6,7 +6,7 @@ class FetcherCSV:
     def __init__(self):
         base_dir = os.path.dirname(__file__)
 
-        self.path = os.path.join(base_dir, "./data/tweets_injected3.csv")
+        self.path = os.path.join(base_dir, "../data/tweets_injected3.csv")
         self.path_weapon = os.path.join(base_dir, "../data/weapon_list.txt")
 
     def fetcher_from_csv(self):

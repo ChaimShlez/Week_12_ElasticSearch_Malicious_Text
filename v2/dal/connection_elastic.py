@@ -1,10 +1,25 @@
+import os
+from datetime import time
+
 from pprint import pprint
 
 from elasticsearch import Elasticsearch
 
 class ConnectionElastic:
     def __init__(self):
-        self.es = Elasticsearch('http://localhost:9200')
+        es_host = os.getenv("ELASTICSEARCH_HOSTS", "http://localhost:9200")
+        self.es = Elasticsearch(es_host)
+        for i in range(10):
+            try:
+                print(self.es.info())
+                break
+            except ConnectionError:
+                print("Elasticsearch ...")
+                time.sleep(3)
+
+        else:
+            raise Exception("")
+
         print(self.es.info())
 
 
