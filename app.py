@@ -1,3 +1,4 @@
+import uvicorn
 from fastapi import FastAPI
 from elasticsearch import Elasticsearch
 
@@ -17,7 +18,5 @@ def get_antisemitic_with_weapons():
 
 
 
-# if __name__ == "__main__":
-#     f = app()
-#     f.run()
-
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)

@@ -59,16 +59,16 @@ class Queries:
 
         }
         results = self.con_elastic.get_all(self.name_index, query)
-        for hit in results['hits']['hits']:
-            pprint(hit['_source'])
-        print("---------------------------------------------------------------------------------------------")
+        # for hit in results['hits']['hits']:
+        #     pprint(hit['_source'])
+        # print("---------------------------------------------------------------------------------------------")
 
         return results
 
-    def update_mapping(self):
+    def update_mapping(self,name_field):
         new_mappings = {
             "properties": {
-                "sentiment": {"type": "keyword"}
+                name_field: {"type": "keyword"}
             }
         }
 
@@ -92,16 +92,10 @@ class Queries:
 
     def delete_by_condition(self, conditions):
         try:
-            must_conditions = []
-            for field, value in conditions.items():
-                if isinstance(value, list):
-                    must_conditions.append({"terms": {field: value}})
-                else:
-                    must_conditions.append({"term": {field: value}})
 
-            body = {"query": {"bool": {"must": must_conditions}}}
 
-            res = self.con_elastic.es.delete_by_query(index=self.name_index, body=body)
+
+            res = self.con_elastic.es.delete_by_query(index=self.name_index, body=conditions)
             print(f"Deleted {res['deleted']} documents")
         except Exception as e:
             print(f"Failed to delete documents from index {self.name_index}: {e}")
